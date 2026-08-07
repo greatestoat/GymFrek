@@ -5,11 +5,10 @@ require('dotenv').config();
 // every query in this project uses parameterized placeholders ($1, $2, ...)
 // so user input can never be interpreted as SQL (prevents SQL injection).
 const pool = new Pool({
-  host: process.env.PGHOST,
-  port: process.env.PGPORT,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
