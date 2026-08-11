@@ -179,74 +179,129 @@ export default function MembersPage() {
         </div>
       </div>
 
-      {/* Table */}
+      {/* List */}
       {loading ? (
-  <div className="space-y-2">
-    {Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton h-14" />)}
-  </div>
-) : members.length === 0 ? (
-  <EmptyState
-    title="No members found"
-    description="Try adjusting your filters, or add your first member to get started."
-    action={<button type="button" className="btn-primary" style={{ width: 'auto' }} onClick={() => { setEditingMember(null); setFormOpen(true); }}>+ Add Member</button>}
-  />
-) : (
-  <>
-    {/* Mobile card list */}
-    <div className="md:hidden space-y-3">
-      {members.map((m) => (
-        <div key={m.id} className="card">
-          <div className="flex items-start gap-3">
-            <span className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 overflow-hidden" style={{ backgroundColor: 'var(--surface-2)' }}>
-              {m.photoUrl ? <img src={m.photoUrl} alt="" className="w-full h-full object-cover" /> : m.fullName.slice(0, 1).toUpperCase()}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-medium truncate">{m.fullName}</p>
-                <span className={`badge badge-${m.membershipStatus.toLowerCase()} shrink-0`}>{m.membershipStatus}</span>
-              </div>
-              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{m.mobile}</p>
-              {m.email && <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{m.email}</p>}
-
-              {m.activePlanName ? (
-                <p className="text-xs mt-1">
-                  {m.activePlanName}
-                  {m.activePlanEndDate && <span style={{ color: 'var(--text-muted)' }}> · till {new Date(m.activePlanEndDate).toLocaleDateString()}</span>}
-                </p>
-              ) : (
-                <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>No active plan</p>
-              )}
-              {(m as MemberWithPT).activeTrainingPlanName && (
-                <p className="text-xs mt-0.5" style={{ color: '#FFB43C' }}>
-                  PT: {(m as MemberWithPT).activeTrainingTrainerName}
-                </p>
-              )}
-              <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-                Joined {new Date(m.joinDate).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
-            <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setInvoiceTarget(m)}>View</button>
-            <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setHistoryTarget(m)}>History</button>
-            <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setAssignTarget(m)}>Assign Plan</button>
-            <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setAssignPTTarget(m)}>Assign PT</button>
-            <button type="button" className="btn-icon ml-auto" onClick={() => { setEditingMember(m); setFormOpen(true); }} aria-label={`Edit ${m.fullName}`}>✎</button>
-            <button type="button" className="btn-icon" onClick={() => setDeleteTarget(m)} aria-label={`Delete ${m.fullName}`} style={{ color: 'var(--danger)' }}>🗑</button>
-          </div>
+        <div className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton h-14" />)}
         </div>
-      ))}
-    </div>
+      ) : members.length === 0 ? (
+        <EmptyState
+          title="No members found"
+          description="Try adjusting your filters, or add your first member to get started."
+          action={<button type="button" className="btn-primary" style={{ width: 'auto' }} onClick={() => { setEditingMember(null); setFormOpen(true); }}>+ Add Member</button>}
+        />
+      ) : (
+        <>
+          {/* Mobile / tablet card list */}
+          <div className="md:hidden space-y-3">
+            {members.map((m) => (
+              <div key={m.id} className="card">
+                <div className="flex items-start gap-3">
+                  <span className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 overflow-hidden" style={{ backgroundColor: 'var(--surface-2)' }}>
+                    {m.photoUrl ? <img src={m.photoUrl} alt="" className="w-full h-full object-cover" /> : m.fullName.slice(0, 1).toUpperCase()}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-medium truncate">{m.fullName}</p>
+                      <span className={`badge badge-${m.membershipStatus.toLowerCase()} shrink-0`}>{m.membershipStatus}</span>
+                    </div>
+                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{m.mobile}</p>
+                    {m.email && <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{m.email}</p>}
 
-    {/* Desktop table */}
-    <div className="hidden md:block card overflow-x-auto p-0">
-      <table className="table-shell">
-        {/* ...unchanged table exactly as you have it... */}
-      </table>
-    </div>
-  </>
-)}
+                    {m.activePlanName ? (
+                      <p className="text-xs mt-1">
+                        {m.activePlanName}
+                        {m.activePlanEndDate && <span style={{ color: 'var(--text-muted)' }}> · till {new Date(m.activePlanEndDate).toLocaleDateString()}</span>}
+                      </p>
+                    ) : (
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>No active plan</p>
+                    )}
+                    {(m as MemberWithPT).activeTrainingPlanName && (
+                      <p className="text-xs mt-0.5" style={{ color: '#FFB43C' }}>
+                        PT: {(m as MemberWithPT).activeTrainingTrainerName}
+                        {(m as MemberWithPT).activeTrainingPlanEndDate ? ` · till ${new Date((m as MemberWithPT).activeTrainingPlanEndDate!).toLocaleDateString()}` : ''}
+                      </p>
+                    )}
+                    <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                      Joined {new Date(m.joinDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
+                  <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setInvoiceTarget(m)}>View</button>
+                  <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setHistoryTarget(m)}>History</button>
+                  <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setAssignTarget(m)}>Assign Plan</button>
+                  <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setAssignPTTarget(m)}>Assign PT</button>
+                  <button type="button" className="btn-icon ml-auto" onClick={() => { setEditingMember(m); setFormOpen(true); }} aria-label={`Edit ${m.fullName}`}>✎</button>
+                  <button type="button" className="btn-icon" onClick={() => setDeleteTarget(m)} aria-label={`Delete ${m.fullName}`} style={{ color: 'var(--danger)' }}>🗑</button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden md:block card overflow-x-auto p-0">
+            <table className="table-shell">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Mobile</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Join Date</th>
+                  <th className="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {members.map((m) => (
+                  <tr key={m.id}>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 overflow-hidden" style={{ backgroundColor: 'var(--surface-2)' }}>
+                          {m.photoUrl ? <img src={m.photoUrl} alt="" className="w-full h-full object-cover" /> : m.fullName.slice(0, 1).toUpperCase()}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="font-medium truncate">{m.fullName}</p>
+                          {m.email && <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{m.email}</p>}
+                        </div>
+                      </div>
+                    </td>
+                    <td>{m.mobile}</td>
+                    <td>
+                      {m.activePlanName ? (
+                        <div>
+                          <p>{m.activePlanName}</p>
+                          {m.activePlanEndDate && <p className="text-xs" style={{ color: 'var(--text-muted)' }}>till {new Date(m.activePlanEndDate).toLocaleDateString()}</p>}
+                        </div>
+                      ) : (
+                        <span style={{ color: 'var(--text-muted)' }}>—</span>
+                      )}
+                      {(m as MemberWithPT).activeTrainingPlanName && (
+                        <p className="text-xs mt-1" style={{ color: '#FFB43C' }}>
+                          PT: {(m as MemberWithPT).activeTrainingTrainerName}{(m as MemberWithPT).activeTrainingPlanEndDate ? ` · till ${new Date((m as MemberWithPT).activeTrainingPlanEndDate!).toLocaleDateString()}` : ''}
+                        </p>
+                      )}
+                    </td>
+                    <td><span className={`badge badge-${m.membershipStatus.toLowerCase()}`}>{m.membershipStatus}</span></td>
+                    <td>{new Date(m.joinDate).toLocaleDateString()}</td>
+                    <td>
+                      <div className="flex justify-end gap-2">
+                        <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setInvoiceTarget(m)}>View</button>
+                        <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setHistoryTarget(m)}>History</button>
+                        <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setAssignTarget(m)}>Assign Membership</button>
+                        <button type="button" className="btn-secondary text-xs px-3 py-1.5" onClick={() => setAssignPTTarget(m)}>Assign PT</button>
+                        <button type="button" className="btn-icon" onClick={() => { setEditingMember(m); setFormOpen(true); }} aria-label={`Edit ${m.fullName}`}>✎</button>
+                        <button type="button" className="btn-icon" onClick={() => setDeleteTarget(m)} aria-label={`Delete ${m.fullName}`} style={{ color: 'var(--danger)' }}>🗑</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
 
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
