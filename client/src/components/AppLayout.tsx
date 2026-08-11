@@ -1,5 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import MobileNav from './MobileNav';
 import NotificationBell from './NotificationBell';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -15,25 +16,20 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="page-shell flex">
+    <div className="page-shell flex flex-col lg:flex-row">
       <Sidebar />
+      <MobileNav onLogout={handleLogout} />
+
       <div className="flex-1 min-w-0">
+        {/* Desktop-only top bar: theme toggle + bell + avatar + logout */}
         <header
           className="hidden lg:flex items-center justify-end gap-3 px-8 py-4 border-b"
           style={{ borderColor: 'var(--border)' }}
         >
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="btn-icon"
-            aria-label="Toggle dark or light theme"
-            title="Toggle theme"
-          >
+          <button type="button" onClick={toggleTheme} className="btn-icon" aria-label="Toggle dark or light theme" title="Toggle theme">
             {theme === 'dark' ? '☾' : '☀'}
           </button>
-
           <NotificationBell />
-
           <div className="flex items-center gap-2 pl-2">
             <span
               className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold"
@@ -47,21 +43,6 @@ export default function AppLayout() {
             Log out
           </button>
         </header>
-
-        <div className="lg:hidden flex items-center justify-end gap-2 px-4 py-2">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="btn-icon"
-            aria-label="Toggle dark or light theme"
-          >
-            {theme === 'dark' ? '☾' : '☀'}
-          </button>
-          <NotificationBell />
-          <button type="button" className="btn-secondary" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
 
         <main className="p-4 sm:p-6 lg:p-8">
           <Outlet />
