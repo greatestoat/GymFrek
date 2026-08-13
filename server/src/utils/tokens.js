@@ -52,7 +52,7 @@ function hashToken(token) {
 function baseCookieOptions() {
   return {
     httpOnly: true,
-    secure: process.env.COOKIE_SECURE === 'true',
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
     path: '/api/auth', // only sent to auth endpoints (refresh/logout)
   };
