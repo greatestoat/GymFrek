@@ -53,7 +53,7 @@ function baseCookieOptions() {
   return {
     httpOnly: true,
     secure: process.env.COOKIE_SECURE === 'true',
-    sameSite: 'strict',
+    sameSite: 'none',
     path: '/api/auth', // only sent to auth endpoints (refresh/logout)
   };
 }
